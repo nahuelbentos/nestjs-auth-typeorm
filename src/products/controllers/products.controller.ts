@@ -10,7 +10,7 @@ import {
   HttpStatus,
   HttpCode,
   Res,
-  UseGuards
+  UseGuards,
   // ParseIntPipe,
 } from '@nestjs/common';
 import { Response } from 'express';
@@ -24,10 +24,10 @@ import {
 } from '../dtos/products.dtos';
 import { ProductsService } from './../services/products.service';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { Public } from 'src/auth/decorators/public.decorator';
+import { Role } from 'src/auth/models/roles.model';
+import { Roles } from '../../auth/decorators/role.decorator';
 import { RolesGuard } from '../../auth/guards/roles.guard';
-import { Public } from '../../auth/decorators/public.decorator';
-import { Roles } from '../../auth/decorators/roles.decorator';
-import { Role } from '../../auth/models/roles.model';
 
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiTags('products')

@@ -1,15 +1,14 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
-
-import { ROLES_KEY } from '../decorators/roles.decorator';
-import { PayloadToken } from '../models/token.model';
+import { Reflector } from '@nestjs/core';
+import { ROLES_KEY } from '../decorators/role.decorator';
 import { Role } from '../models/roles.model';
+import { PayloadToken } from '../models/token.model';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -21,13 +20,11 @@ export class RolesGuard implements CanActivate {
     if (!roles) {
       return true;
     }
-    // ['admin', 'customer'];
     const request = context.switchToHttp().getRequest();
     const user = request.user as PayloadToken;
-    // { role: 'admin', sub: 1212 }
     const isAuth = roles.some((role) => role === user.role);
     if (!isAuth) {
-      throw new UnauthorizedException('your role is wrong');
+      throw new ForbiddenException('Your role is not enough');
     }
     return isAuth;
   }
